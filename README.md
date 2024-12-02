@@ -14,3 +14,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+## Importante: Crear la carpeta `videos`
+
+Dentro de la carpeta `assets`, es necesario crear una subcarpeta llamada `videos`.  
+Esta carpeta contendrá todos los videos a los que la aplicación accederá para generar el video traducido.
