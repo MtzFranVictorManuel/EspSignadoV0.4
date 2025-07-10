@@ -1,0 +1,1 @@
+ /Users/vicmtzfran/Documents/Pruebas/EspSignadoV0.5/Traductor/.dart_tool/flutter_build/6f88edb5bee5471a6727f5fa819053cb/native_assets.yaml: 

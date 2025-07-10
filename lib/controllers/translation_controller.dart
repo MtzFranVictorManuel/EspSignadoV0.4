@@ -1,10 +1,12 @@
-
 import 'dart:io';
 import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:path_provider/path_provider.dart';
 import '../models/translation_model.dart';
+import 'video_merger_controller.dart';
 
 class TranslationController {
+  final VideoMergerController _videoMerger = VideoMergerController();
+  
   // Mapa de frases compuestas que deben tratarse como una sola unidad
   static const Map<String, String> _compoundPhrases = {
     'buenas noches': 'buenas_noches',
@@ -20,12 +22,12 @@ class TranslationController {
     // Agrega más frases según tus videos disponibles
   };
 
+  /// Traduce texto en español a una lista de rutas de videos de LSM
+  ///
+  /// Recibe el [text] a traducir y devuelve un [TranslationModel] con los resultados
+  /// y estadísticas de la traducción.
   Future<TranslationModel> translate(String text) async {
-    print('=== INICIO TRADUCCIÓN ==='); //
-    print('Texto original: "$text"'); // --- IGNORE ---
-    
     List<String> processedWords = _processCompoundPhrases(text);
-    print('Palabras procesadas: $processedWords'); // --- IGNORE ---
     
     List<String> videoPaths = [];
  
@@ -33,30 +35,24 @@ class TranslationController {
       String normalizedWord = _normalize(word);
       String assetPath = 'assets/videos/$normalizedWord.mp4';
       
-      print('Buscando: "$word" -> "$normalizedWord" -> "$assetPath"'); // --- IGNORE ---
-      
       if (await _assetExists(assetPath)) {
-        print('✅ Asset encontrado: $assetPath');  // --- IGNORE ---
         String videoPath = await _copyAssetToLocalPath(assetPath, normalizedWord);
-        print('✅ Video copiado a: $videoPath');  // --- IGNORE ---
         videoPaths.add(videoPath);
-      } else {
-        print('❌ Asset NO encontrado: $assetPath'); // --- IGNORE ---
       }
     }
-    
-    print('Videos finales: $videoPaths');// --- IGNORE ---
-    print('=== FIN TRADUCCIÓN ===');// --- IGNORE ---
     
     return TranslationModel(originalText: text, translatedText: videoPaths.join(','));
   }
 
+  /// Procesa el texto para identificar frases compuestas que tienen
+  /// un único video correspondiente en los assets
+  /// 
+  /// Devuelve una lista de palabras/frases normalizadas listas para ser buscadas
+  /// como videos individuales.
   List<String> _processCompoundPhrases(String text) {
     String normalizedText = _removeAccents(text.toLowerCase());
     // Eliminar signos de puntuación para buscar frases compuestas correctamente
     String cleanText = normalizedText.replaceAll(RegExp(r'[^\w\s]'), ' ').replaceAll(RegExp(r'\s+'), ' ').trim();
-    print('Texto normalizado: "$normalizedText"');
-    print('Texto limpio para búsqueda: "$cleanText"');
     
     List<String> result = [];
     
@@ -70,21 +66,16 @@ class TranslationController {
       for (String phrase in _compoundPhrases.keys) {
         if (remainingText.startsWith(phrase)) {
           String videoName = _compoundPhrases[phrase]!;
-          print('Frase compuesta encontrada: "$phrase" -> "$videoName"');
           result.add(videoName);
           remainingText = remainingText.substring(phrase.length).trim();
           foundPhrase = true;
           break;
         }
       }
-      
-      // Si no se encontró una frase compuesta, tomar la siguiente palabra
       if (!foundPhrase) {
         List<String> words = remainingText.split(' ');
         if (words.isNotEmpty && words.first.isNotEmpty) {
-          print('Palabra individual: "${words.first}"');
           result.add(words.first);
-          // Remover la primera palabra y continuar
           words.removeAt(0);
           remainingText = words.join(' ').trim();
         } else {
@@ -96,13 +87,15 @@ class TranslationController {
     return result;
   }
 
+  /// Normaliza un texto para usarlo como nombre de archivo
+  /// 
+  /// Convierte a minúsculas, elimina acentos y caracteres especiales
   String _normalize(String input) {
-    // Primero eliminar acentos y caracteres especiales
     String normalizedText = _removeAccents(input);
-    // Luego convertir a minúsculas y eliminar signos ortográficos, PERO preservar guiones bajos
     return normalizedText.toLowerCase().replaceAll(RegExp(r'[^a-z0-9_]'), '');
   }
 
+  /// Remueve acentos y caracteres especiales de un texto
   String _removeAccents(String input) {
     // Mapa de caracteres con acentos a caracteres sin acentos
     const Map<String, String> accentMap = {
@@ -130,6 +123,10 @@ class TranslationController {
     return result;
   }
 
+  /// Verifica si un asset existe en el bundle de la aplicación
+  /// 
+  /// [assetPath] Ruta del asset a verificar
+  /// Retorna true si el asset existe, false en caso contrario
   Future<bool> _assetExists(String assetPath) async {
     try {
       await rootBundle.load(assetPath);
@@ -139,6 +136,11 @@ class TranslationController {
     }
   }
 
+  /// Copia un archivo de video desde los assets al almacenamiento local
+  /// 
+  /// [assetPath] Ruta del video en los assets
+  /// [fileName] Nombre del archivo para guardar
+  /// Retorna la ruta completa del archivo copiado
   Future<String> _copyAssetToLocalPath(String assetPath, String fileName) async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
     String path = '${appDocDir.path}/videos';
@@ -153,5 +155,38 @@ class TranslationController {
     List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
     await File(videoPath).writeAsBytes(bytes);
     return videoPath;
+  }
+
+  /// Traduce texto y une todos los videos encontrados en un solo archivo
+  /// 
+  /// [text] Texto a traducir
+  /// [outputFileName] Nombre del archivo de salida (opcional)
+  /// Retorna TranslationModel con la ruta del video unido o un paquete de videos
+  Future<TranslationModel> translateAndMerge(String text, {String? outputFileName}) async {
+    // Primero hacer la traducción normal
+    TranslationModel translation = await translate(text);
+    
+    // Si no hay videos, retornar la traducción original
+    if (translation.translatedText.isEmpty) {
+      return translation;
+    }
+    
+    // Obtener las rutas de los videos
+    List<String> videoPaths = translation.translatedText.split(',');
+    
+    // Generar nombre de archivo si no se proporciona
+    String fileName = outputFileName ?? 'merged_${DateTime.now().millisecondsSinceEpoch}';
+    
+    // Unir los videos
+    String? mergedVideoPath = await _videoMerger.mergeVideos(videoPaths, fileName);
+    
+    if (mergedVideoPath != null) {
+      return TranslationModel(
+        originalText: text, 
+        translatedText: mergedVideoPath
+      );
+    } else {
+      return translation;
+    }
   }
 }

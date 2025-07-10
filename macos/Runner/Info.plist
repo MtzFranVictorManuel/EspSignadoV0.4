@@ -37,5 +37,11 @@
 	<string>Necesitamos acceso al micrófono para grabar audio.</string>
 	<key>NSDocumentsFolderUsageDescription</key>
 	<string>Necesitamos acceso a la carpeta de documentos para guardar videos.</string>
+	<key>NSUserDownloadsDirectoryUsageDescription</key>
+	<string>Necesitamos acceso para seleccionar carpeta de destino.</string>
+	<key>NSFilenameAccess</key>
+	<true/>
+	<key>NSSystemAdministrationUsageDescription</key>
+	<string>Necesitamos acceso para seleccionar carpetas del sistema.</string>
 </dict>
 </plist>

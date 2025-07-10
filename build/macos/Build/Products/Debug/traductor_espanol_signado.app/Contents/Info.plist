@@ -45,11 +45,13 @@
 	<key>DTXcodeBuild</key>
 	<string>16A242d</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.14</string>
+	<string>12.0</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Necesitamos acceso a la cámara para grabar videos.</string>
 	<key>NSDocumentsFolderUsageDescription</key>
 	<string>Necesitamos acceso a la carpeta de documentos para guardar videos.</string>
+	<key>NSFilenameAccess</key>
+	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2024 com.example. All rights reserved.</string>
 	<key>NSMainNibFile</key>
@@ -60,5 +62,9 @@
 	<string>Necesitamos acceso a la biblioteca de fotos para guardar videos.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSSystemAdministrationUsageDescription</key>
+	<string>Necesitamos acceso para seleccionar carpetas del sistema.</string>
+	<key>NSUserDownloadsDirectoryUsageDescription</key>
+	<string>Necesitamos acceso para seleccionar carpeta de destino.</string>
 </dict>
 </plist>
