@@ -10,7 +10,7 @@
 		</data>
 		<key>Resources/Assets.car</key>
 		<data>
-		u6WCwnsMwm6Oi2ur6odSI7YbQSA=
+		8eO0rWQceJRB8MiSNdLrjdkESk8=
 		</data>
 		<key>Resources/Base.lproj/MainMenu.nib</key>
 		<data>
@@ -23,10 +23,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			Y+pIgVoqfp7+AKHh3Ri2mvH6XcA=
+			98vOcZ6yInCI6snzOaDqn/ATbzA=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"63ea48815a2a7e9efe00a1e1dd18b69af1fa5dc0"</string>
+			<string>cdhash H"f7cbce719eb2227088eac9f339a0ea9ff0136f30"</string>
 		</dict>
 		<key>Frameworks/FlutterMacOS.framework</key>
 		<dict>
@@ -212,19 +212,19 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			4fInZQWNxUJTrM1HFOW1eo7hFc8=
+			lvoepFbbInL085utyHjs1xu9fP0=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"e1f22765058dc54253accd4714e5b57a8ee115cf"</string>
+			<string>cdhash H"96fa1ea456db2272f4f39badc878ecd71bbd7cfd"</string>
 		</dict>
 		<key>Frameworks/video_player_avfoundation.framework</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			sGlMBwJDnutb2KzUDwMldIxksLs=
+			P9fsiyiYEncfPFyjpqZpMzMAKDI=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"b0694c0702439eeb5bd8acd40f0325748c64b0bb"</string>
+			<string>cdhash H"3fd7ec8b289812771f3c5ca3a6a6693333002832"</string>
 		</dict>
 		<key>MacOS/__preview.dylib</key>
 		<dict>
@@ -239,10 +239,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			cabmGDEiTHHyDDzWEE+G/sp0tDU=
+			2Ktk3oGZoxqc3ADq+nwGYJF+nmw=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"71a6e61831224c71f20c3cd6104f86feca74b435"</string>
+			<string>cdhash H"d8ab64de8199a31a9cdc00eafa7c0660917e9e6c"</string>
 		</dict>
 		<key>Resources/AppIcon.icns</key>
 		<dict>
@@ -255,7 +255,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			fJ6uBsXZovj/qs6dYlVZ4WBjHAXjt/JDbD2nhHlSQPc=
+			1//ywPQD//iPNXeOCVoHiPIPH+z3ngw055KTBv5bA8s=
 			</data>
 		</dict>
 		<key>Resources/Base.lproj/MainMenu.nib</key>
